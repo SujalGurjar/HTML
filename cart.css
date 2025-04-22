@@ -1,0 +1,144 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body {
+    background-color: #f5f5f5;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 50px auto;
+    padding: 20px;
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  .modal {
+    background-color: white;
+    width: 100%;
+    max-width: 800px;
+    padding: 30px;
+    position: relative;
+  }
+  
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .modal-title {
+    font-size: 20px;
+    font-weight: normal;
+  }
+  
+  .close-button {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .product-container {
+    display: flex;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #eaeaea;
+    padding-bottom: 30px;
+  }
+  
+  .product-image {
+    width: 250px;
+    height: 250px;
+    background-color: #f0f0f0;
+    margin-right: 30px;
+    object-fit: contain;
+  }
+  
+  .product-details {
+    flex: 1;
+  }
+  
+  .product-id {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 5px;
+  }
+  
+  .product-name {
+    font-size: 18px;
+    margin-bottom: 10px;
+    font-weight: normal;
+  }
+  
+  .product-price {
+    font-size: 18px;
+    margin-bottom: 20px;
+  }
+  
+  .view-details {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .size-section {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .size-guide {
+    color: #333;
+    text-decoration: none;
+    font-size: 14px;
+  }
+  
+  .size-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+  
+  .size-option {
+    width: 60px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #ddd;
+    cursor: pointer;
+    background-color: white;
+  }
+  
+  .size-option.selected {
+    border: 1px solid #000;
+  }
+  
+  .concierge-button {
+    width: 100%;
+    background-color: black;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 16px;
+    cursor: pointer;
+    text-align: center;
+  }
