@@ -1,2 +1,3 @@
-# HTML
+# TrendyBeanz
+
 Project front end
