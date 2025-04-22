@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fortress - Create Account</title>
+    <!-- Add Remix Icon CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/loginStyle.css">
+</head>
+<body>
+    <header>
+        <nav class="nav-left">
+            <a href="#" class="nav-link">Shoes</a>
+            <a href="#" class="nav-link">Accessories</a>
+        </nav>
+        
+        <div class="logo">
+           <h5>trendz</h5>
+        <div class="underline"></div>
+
+        </div>
+        
+        <nav class="nav-right">
+            <!-- <a href="#" class="nav-link">Rewards</a> -->
+            <a href="#" class="nav-link icon">
+                <i class="ri-user-line"></i>
+            </a>
+            <a href="#" class="nav-link icon">
+                <i class="ri-shopping-bag-line"></i>
+                <span class="cart-counter">0</span>
+            </a>
+        </nav>
+        
+        <!-- <div class="nav-line"></div> -->
+    </header>
+    <form th:action="@{/save}" th:object="${sh}" method="post">
+    <main>
+        <h1>Create Account</h1>
+        <div class="underline"></div>
+        
+        <div class="form-container">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" th:field="*{firstName}" th:id="firstName" th:name="firstName">
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" th:field="*{lastName}" th:id="lastName" th:name="lastName">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" th:field="*{email}" th:id="email" th:name="email">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" th:field="*{password}" th:id="password" th:name="password">
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" class="btn btn-primary">CREATE</button>
+                <a href="/return" class="btn btn-secondary">RETURN TO STORE</a>
+            </div>
+        </div>
+    </main>
+</form>
+    <footer>
+        <h2 class="footer-heading">Join the trendz</h2>
+
+    </footer>
+
+</body>
+</html>
