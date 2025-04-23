@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Dashboard - Trendz</title>
+    <link rel="shortcut icon" href="/img/favicon.ico" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/col.css">
+    <style>
+        :root {
+            --primary-color: #000;
+            --secondary-color: #333;
+            --accent-color: #f1f1f1;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --warning-color: #ffc107;
+            --gray-light: #f9f9f9;
+            --gray-medium: #e1e1e1;
+            --gray-dark: #777;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: var(--secondary-color);
+        }
+
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            height: 100%;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .vendor-info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .vendor-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .vendor-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .vendor-status {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 20px 0;
+        }
+
+        .sidebar-menu li {
+            padding: 0;
+        }
+
+        .sidebar-menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding-left: 25px;
+        }
+
+        .sidebar-menu i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            background-color: var(--gray-light);
+            overflow-y: auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .upload-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .upload-btn i {
+            margin-right: 5px;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-card-title {
+            color: var(--gray-dark);
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .stat-card-value {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-card-change {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .positive-change {
+            color: var(--success-color);
+        }
+
+        .negative-change {
+            color: var(--danger-color);
+        }
+
+        /* Photo Collection Section */
+        .collection-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .collection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .photo-card {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            height: 200px;
+            border: 1px solid var(--gray-medium);
+            transition: transform 0.3s ease;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-title {
+            font-size: 14px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 70%;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .card-actions button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .add-photo-card {
+            height: 200px;
+            border: 2px dashed var(--gray-medium);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .add-photo-card:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .add-photo-card i {
+            font-size: 36px;
+            color: var(--gray-dark);
+            margin-bottom: 10px;
+        }
+
+        .add-photo-card span {
+            color: var(--gray-dark);
+            font-size: 14px;
+        }
+
+        /* Upload Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: white;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--gray-dark);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gray-medium);
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid var(--gray-medium);
+            border-radius: 4px;
+            font-size: 14px;
+            background-color: white;
+        }
+
+        .upload-area {
+            border: 2px dashed var(--gray-medium);
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 20px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .upload-area.drag-over {
+            border-color: var(--primary-color);
+            background-color: rgba(0, 0, 0, 0.02);
+        }
+
+        .upload-icon {
+            font-size: 36px;
+            color: var(--gray-dark);
+            margin-bottom: 10px;
+        }
+
+        .upload-text {
+            margin-bottom: 10px;
+            color: var(--gray-dark);
+        }
+
+        .upload-input {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .preview-area {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .preview-area.show {
+            display: block;
+        }
+
+        .image-preview {
+            width: 100%;
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .cancel-btn {
+            background-color: white;
+            border: 1px solid var(--gray-medium);
+            color: var(--secondary-color);
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s;
+        }
+
+        .cancel-btn:hover {
+            background-color: var(--accent-color);
+        }
+
+        .save-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s;
+        }
+
+        .save-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Collection Upload Section */
+        .upload-collection-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .collection-form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .collection-form .form-group:last-child {
+            grid-column: span 2;
+        }
+
+        .selected-photos {
+            margin-top: 20px;
+        }
+
+        .selected-photos-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .selected-photos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+
+        .selected-photo {
+            position: relative;
+            height: 100px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .selected-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .remove-selected {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            border: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: var(--success-color);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1001;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+            }
+
+            .collection-form {
+                grid-template-columns: 1fr;
+            }
+
+            .collection-form .form-group:last-child {
+                grid-column: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .collection-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-left">
+            <a href="/">Home</a>
+            <a href="/acs">Accessories</a>
+        </div>
+
+        <div class="nav-middle">
+            <h1>Trendz</h1>
+        </div>
+
+        <div class="nav-right">
+            <a href="/cart.html"><i class="ri-shopping-bag-4-line"></i></a>
+            <a href=""><i class="ri-heart-3-line"></i></a>
+            <a href="" class="active"><i class="ri-user-3-line"></i></a>
+            <div class="btn2">
+                <a href="">Join-us</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="vendor-info">
+                    <div class="vendor-avatar">V</div>
+                    <div>
+                        <div class="vendor-name">Vendor Name</div>
+                        <div class="vendor-status">Verified Seller</div>
+                    </div>
+                </div>
+            </div>
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active"><i class="ri-dashboard-line"></i> Dashboard</a></li>
+                <li><a href="#"><i class="ri-store-2-line"></i> Products</a></li>
+                <li><a href="#"><i class="ri-gallery-line"></i> Collections</a></li>
+                <li><a href="#"><i class="ri-shopping-bag-line"></i> Orders</a></li>
+                <li><a href="#"><i class="ri-user-settings-line"></i> Settings</a></li>
+                <li><a href="#"><i class="ri-customer-service-line"></i> Support</a></li>
+                <li><a href="#"><i class="ri-logout-box-r-line"></i> Logout</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Dashboard Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Photo Collection Management</h1>
+                <button class="upload-btn" id="openUploadModal">
+                    <i class="ri-upload-cloud-line"></i> Upload New Photo
+                </button>
+            </div>
+
+            <!-- Dashboard Stats -->
+            <div class="dashboard-stats">
+                <div class="stat-card">
+                    <div class="stat-card-title">Total Photos</div>
+                    <div class="stat-card-value">24</div>
+                    <div class="stat-card-change positive-change">
+                        <i class="ri-arrow-up-line"></i> 12% from last month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Active Collections</div>
+                    <div class="stat-card-value">3</div>
+                    <div class="stat-card-change positive-change">
+                        <i class="ri-arrow-up-line"></i> 1 new this month
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Total Views</div>
+                    <div class="stat-card-value">1,254</div>
+                    <div class="stat-card-change positive-change">
+                        <i class="ri-arrow-up-line"></i> 8% from last week
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-card-title">Sales from Collections</div>
+                    <div class="stat-card-value">₹ 12,540</div>
+                    <div class="stat-card-change negative-change">
+                        <i class="ri-arrow-down-line"></i> 3% from last week
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photo Collection Section -->
+            <div class="collection-section">
+                <div class="section-header">
+                    <h2 class="section-title">My Photo Library</h2>
+                    <div>
+                        <select class="form-select" style="width: auto; display: inline-block; margin-right: 10px;">
+                            <option value="all">All Photos</option>
+                            <option value="summer">Summer Collection</option>
+                            <option value="winter">Winter Collection</option>
+                            <option value="casual">Casual Wear</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="collection-grid">
+                    <div class="photo-card">
+                        <img src="https://via.placeholder.com/300x300?text=Product+1" alt="Product photo">
+                        <div class="photo-card-overlay">
+                            <div class="card-title">Summer T-Shirt 1</div>
+                            <div class="card-actions">
+                                <button title="Edit"><i class="ri-edit-line"></i></button>
+                                <button title="Delete"><i class="ri-delete-bin-line"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="photo-card">
+                        <img src="https://via.placeholder.com/300x300?text=Product+2" alt="Product photo">
+                        <div class="photo-card-overlay">
+                            <div class="card-title">Summer T-Shirt 2</div>
+                            <div class="card-actions">
+                                <button title="Edit"><i class="ri-edit-line"></i></button>
+                                <button title="Delete"><i class="ri-delete-bin-line"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="photo-card">
+                        <img src="https://via.placeholder.com/300x300?text=Product+3" alt="Product photo">
+                        <div class="photo-card-overlay">
+                            <div class="card-title">Blue Jeans</div>
+                            <div class="card-actions">
+                                <button title="Edit"><i class="ri-edit-line"></i></button>
+                                <button title="Delete"><i class="ri-delete-bin-line"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="photo-card">
+                        <img src="https://via.placeholder.com/300x300?text=Product+4" alt="Product photo">
+                        <div class="photo-card-overlay">
+                            <div class="card-title">Black Leather Jacket</div>
+                            <div class="card-actions">
+                                <button title="Edit"><i class="ri-edit-line"></i></button>
+                                <button title="Delete"><i class="ri-delete-bin-line"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="photo-card">
+                        <img src="https://via.placeholder.com/300x300?text=Product+5" alt="Product photo">
+                        <div class="photo-card-overlay">
+                            <div class="card-title">White Sneakers</div>
+                            <div class="card-actions">
+                                <button title="Edit"><i class="ri-edit-line"></i></button>
+                                <button title="Delete"><i class="ri-delete-bin-line"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="add-photo-card" id="addPhotoBtn">
+                        <i class="ri-add-circle-line"></i>
+                        <span>Add New Photo</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Collection Section -->
+            <div class="upload-collection-section">
+                <div class="section-header">
+                    <h2 class="section-title">Upload to Collection Page</h2>
+                </div>
+
+                <form class="collection-form">
+                    <div class="form-group">
+                        <label class="form-label">Collection Name</label>
+                        <input type="text" class="form-input" placeholder="e.g. Summer 2025 Collection">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select">
+                            <option>Select a category</option>
+                            <option>Men's Wear</option>
+                            <option>Women's Wear</option>
+                            <option>Accessories</option>
+                            <option>Footwear</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-input" rows="4" placeholder="Describe your collection..."></textarea>
+                    </div>
+                </form>
+
+                <div class="selected-photos">
+                    <h3 class="selected-photos-title">Selected Photos (5)</h3>
+                    <div class="selected-photos-grid">
+                        <div class="selected-photo">
+                            <img src="https://via.placeholder.com/300x300?text=Product+1" alt="Selected photo">
+                            <button class="remove-selected"><i class="ri-close-line"></i></button>
+                        </div>
+                        <div class="selected-photo">
+                            <img src="https://via.placeholder.com/300x300?text=Product+2" alt="Selected photo">
+                            <button class="remove-selected"><i class="ri-close-line"></i></button>
+                        </div>
+                        <div class="selected-photo">
+                            <img src="https://via.placeholder.com/300x300?text=Product+3" alt="Selected photo">
+                            <button class="remove-selected"><i class="ri-close-line"></i></button>
+                        </div>
+                        <div class="selected-photo">
+                            <img src="https://via.placeholder.com/300x300?text=Product+4" alt="Selected photo">
+                            <button class="remove-selected"><i class="ri-close-line"></i></button>
+                        </div>
+                        <div class="selected-photo">
+                            <img src="https://via.placeholder.com/300x300?text=Product+5" alt="Selected photo">
+                            <button class="remove-selected"><i class="ri-close-line"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="btn-group" style="margin-top: 20px;">
+                    <button class="cancel-btn">Cancel</button>
+                    <button class="save-btn" id="publishCollection">Publish Collection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Upload Photo Modal -->
+    <div class="modal" id="uploadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Upload New Photo</h2>
+                <button class="close-modal" id="closeModal">&times;</button>
+            </div>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label class="form-label">Photo Title</label>
+                    <input type="text" class="form-input" placeholder="Enter photo title" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" required>
+                        <option value="">Select a category</option>
+                        <option value="summer">Summer Collection</option>
+                        <option value="winter">Winter Collection</option>
+                        <option value="casual">Casual Wear</option>
+                        <option value="formal">Formal Wear</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class="upload-area" id="uploadArea">
+                        <i class="ri-upload-cloud-line upload-icon"></i>
+                        <p class="upload-text">Drag & drop your image here or click to browse</p>
+                        <p style="color: #777; font-size: 12px;">Supports: JPG, PNG, WEBP (Max 5MB)</p>
+                        <input type="file" id="photoUpload" class="upload-input" accept="image/*">
+                    </div>
+                    <div class="preview-area" id="previewArea">
+                        <img src="" alt="Preview" class="image-preview" id="imagePreview">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Description (Optional)</label>
+                    <textarea class="form-input" rows="3" placeholder="Add a short description"></textarea>
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="cancel-btn" id="cancelUpload">Cancel</button>
+                    <button type="submit" class="save-btn">Upload Photo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Modal Elements
+            const uploadModal = document.getElementById('uploadModal');
+            const openUploadBtn = document.getElementById('openUploadModal');
+            const closeModalBtn = document.getElementById('closeModal');
+            const cancelUploadBtn = document.getElementById('cancelUpload');
+            const addPhotoBtn = document.getElementById('addPhotoBtn');
+            const publishCollectionBtn = document.getElementById('publishCollection');
+            
+            // Upload Elements
+            const uploadArea = document.getElementById('uploadArea');
+            const photoUpload = document.getElementById('photoUpload');
+            const previewArea = document.getElementById('previewArea');
+            const imagePreview = document.getElementById('imagePreview');
+            const uploadForm = document.getElementById('uploadForm');
+            
+            // Toast Element
+            const toast = document.getElementById('toast');
+            
+            // Open modal
+            function openModal() {
+                uploadModal.classList.add('show');
+            }
+            
+            // Close modal
+            function closeModal() {
+                uploadModal.classList.remove('show');
+                resetUploadForm();
+            }
+            
+            // Reset upload form
+            function resetUploadForm() {
+                uploadForm.reset();
+                previewArea.classList.remove('show');
+                imagePreview.src = '';
+            }
+            
+            // Show toast message
+            function showToast(message) {
+                toast.textContent = message;
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+            
+            // Open modal event listeners
+            openUploadBtn.addEventListener('click', openModal);
+            addPhotoBtn.addEventListener('click', openModal);
+            
+            // Close modal event listeners
+            closeModalBtn.addEventListener('click', closeModal);
+            cancelUploadBtn.addEventListener('click', closeModal);
+            
+            // Handle file upload
+            photoUpload.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                
+                // Check file type
+                const validTypes = ['image/jpeg', 'image/png', 'image/webp'];
+                if (!validTypes.includes(file.type)) {
+                    showToast('Invalid file type. Please upload a JPEG, PNG, or WEBP file.');
+                    return;
+                }
+                
+                // Check file size                
+                const maxSize = 5 * 1024 * 1024; // 5MB in bytes
+                if (file.size > maxSize) {
+                    showToast('File size exceeds the limit. Please select a file smaller than 5MB.');
+                    return;
+                }
+                
+                // Show preview
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                    previewArea.classList.add('show');
+                }
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+</body>
